@@ -1,9 +1,7 @@
 _ = require 'underscore'
 
 exports.decorate = (decorator,f) ->
-    (args...) -> decorator.apply @, [f, args]
-
-
+    (args...) -> decorator.apply @, [f].concat(args)
 
 
 exports.MakeThrottle = (options={}) ->
@@ -11,7 +9,7 @@ exports.MakeThrottle = (options={}) ->
     options.wait = 100
     options.queue = []
         
-    (f,args) ->
+    (f,args...) ->
         console.log 'my f is',f
         # slowly pops the queue
         sink = ->

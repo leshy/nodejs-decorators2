@@ -9,7 +9,7 @@
     return function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return decorator.apply(this, [f, args]);
+      return decorator.apply(this, [f].concat(args));
     };
   };
 
@@ -20,8 +20,9 @@
     options.lasttime = 1;
     options.wait = 100;
     options.queue = [];
-    return function(f, args) {
-      var diff, sink;
+    return function() {
+      var args, diff, f, sink;
+      f = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       console.log('my f is', f);
       sink = function() {
         args = options.queue.shift();
