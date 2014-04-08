@@ -22,7 +22,6 @@
     options.queue = [];
     return function(f, args) {
       var diff, sink;
-      console.log('my f is', f);
       sink = function() {
         args = options.queue.shift();
         f.apply(this, args);

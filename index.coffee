@@ -4,15 +4,12 @@ exports.decorate = (decorator,f) ->
     (args...) -> decorator.apply @, [f, args]
 
 
-
-
 exports.MakeThrottle = (options={}) ->
     options.lasttime = 1
     options.wait = 100
     options.queue = []
         
     (f,args) ->
-        console.log 'my f is',f
         # slowly pops the queue
         sink = ->
             args = options.queue.shift()
