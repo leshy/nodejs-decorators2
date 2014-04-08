@@ -1,8 +1,8 @@
 _ = require 'underscore'
+helpers = require 'helpers'
 
 exports.decorate = (decorator,f) ->
     (args...) -> decorator.apply @, [f, args]
-
 
 exports.MakeThrottle = (options={}) ->
     options.lasttime = 1
@@ -28,3 +28,21 @@ exports.MakeThrottle = (options={}) ->
             if not options.queue.length then setTimeout sink, diff
             options.queue.push args
 
+
+exports.makeNoHammer = (options={}) ->
+    if not options.waittime then options.waittime = 1000
+    history = {}
+    
+    (f,args...) ->
+        if not history[args[0]]
+            history[args[0]] = true
+            helpers.wait options.waittime, -> delete history[args[0]]
+            return f.apply @, args
+
+
+exports.makeDelayExec = (options={}) ->
+    if not options.waittime then options.waittime = 1000
+    (f,args...) ->
+        helpers.wait options.waittime, => return f.apply @, args
+        return undefined
+        
